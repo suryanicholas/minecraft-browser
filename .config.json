@@ -1,0 +1,15 @@
+{
+    "clients": [
+        {
+            "username": "client08889",
+            "password": "client08889",
+            "auth": "offline",
+            "server": null,
+            "unloader": [],
+            "spawner": {
+                "active": false,
+                "locations": []
+            }
+        }
+    ]
+}
