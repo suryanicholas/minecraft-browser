@@ -10,9 +10,25 @@ const tpsPlugin = require('mineflayer-tps')(mineflayer);
 const { evaluate, isNumber, index } = require('mathjs');
 const { text } = require("stream/consumers");
 
+const server = http.createServer((req, res) => {
+    if (req.url === '/socket.io.js') {
+        const filePath = require.resolve('socket.io/client-dist/socket.io.js');
+        fs.readFile(filePath, (err, data) => {
+            if (err) {
+                res.writeHead(404);
+                return res.end('Not found');
+            }
+            res.writeHead(200, {'Content-Type':'application/javascript'});
+            res.end(data);
+        });
+        return;
+    }
+    res.writeHead(200);
+    res.end('Socket.io server running');
+});
 
-const io = new Server(3000, {
-    cors: {origin: "*"}
+const io = new Server(server, {
+    cors: { origin: '*' }
 });
 
 /**
@@ -422,3 +438,5 @@ io.on('connection', (socket) => {
         });
     });
 });
+
+server.listen(3000, ()=>console.log('Socket.io server running on port 3000'));
