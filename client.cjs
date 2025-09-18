@@ -40,6 +40,31 @@ let events = {
 let instance = {};
 let adv = {};
 
+function cleanup(client, socket) {
+    if(!client.onTransfer){
+        delete instance[client.username];
+        client.connected = false;
+        client.afk = false;
+        client.autoSell = false;
+        client.spawner.active = false;
+        client.module = false;
+        client.attack = false;
+        client.agility = false;
+        clearInterval(events.afk[client.username]);
+        clearInterval(events.autoSell[client.username]);
+        clearInterval(events.spawner[client.username]);
+        clearInterval(events.agility[client.username]);
+        clearInterval(events.attack[client.username]);
+        delete events.afk[client.username];
+        delete events.autoSell[client.username];
+        delete events.spawner[client.username];
+        delete events.agility[client.username];
+        delete events.attack[client.username];
+
+    }
+    socket.emit('clients:update', clients);
+}
+
 function createBotInstance(client, io, socket) {
     const bot = mineflayer.createBot({
         host: process.env.SERVER_HOST,
@@ -48,6 +73,7 @@ function createBotInstance(client, io, socket) {
         auth: client.auth,
         version: process.env.CLIENT_VERSION
     });
+
     bot.loadPlugin(tpsPlugin);
 
     bot.once('login', () => {
@@ -124,42 +150,16 @@ function createBotInstance(client, io, socket) {
         });
     });
 
-    const cleanup = () => {
-        if(!client.onTransfer){
-            delete instance[client.username];
-            client.connected = false;
-            client.afk = false;
-            client.autoSell = false;
-            client.spawner.active = false;
-            client.module = false;
-            client.attack = false;
-            client.agility = false;
-            clearInterval(events.afk[client.username]);
-            clearInterval(events.autoSell[client.username]);
-            clearInterval(events.spawner[client.username]);
-            clearInterval(events.agility[client.username]);
-            clearInterval(events.attack[client.username]);
-            delete events.afk[client.username];
-            delete events.autoSell[client.username];
-            delete events.spawner[client.username];
-            delete events.agility[client.username];
-            delete events.attack[client.username];
-
-        }
-        socket.emit('clients:update', clients);
-    };
-
     bot.on('end', (reason) => {
         console.log(`${client.username} \n ${reason}`);
-        cleanup();
+        cleanup(client, socket);
+        socket.emit('clients:end')
     });
     bot.on('kicked', (reason) => {
         console.log(`${client.username} \n ${reason}`);
-        cleanup();
     });
     bot.on('error', (err) => {
         console.log(`${client.username} \n ${err}`);
-        cleanup();
     });
 
     return bot;
@@ -180,11 +180,8 @@ io.on('connection', (socket) => {
      * Handle Request: Create new instance.
      */
     socket.on('clients:connect', (index) => {
-        const client = clients[index];
-        if (instance[client.username]) {
-            console.log(`${client.username} already connected`);
-            return;
-        }
+        let client = clients[index];
+        cleanup(client, socket);
 
         instance[client.username] = createBotInstance(client, io, socket);
     });

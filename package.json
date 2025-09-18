@@ -5,7 +5,8 @@
     "scripts": {
         "build": "vite build",
         "dev": "vite",
-        "client": "node client.cjs"
+        "client": "node client.cjs",
+        "clientv2": "node clientv2.cjs"
     },
     "devDependencies": {
         "@tailwindcss/vite": "^4.0.0",
@@ -22,6 +23,7 @@
         "mineflayer": "^4.31.0",
         "mineflayer-tps": "^1.0.1",
         "prismarine-chat": "^1.11.0",
-        "socket.io": "^4.8.1"
+        "socket.io": "^4.8.1",
+        "socks-proxy-agent": "^8.0.5"
     }
 }

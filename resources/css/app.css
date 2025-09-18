@@ -10,12 +10,13 @@
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
 
-::-webkit-scrollbar{
-    display: none;
+@font-face {
+    font-family: 'Mojang';
+    src: url('../fonts/Mojang-Regular.ttf');
 }
 
-*{
-    font-family: "Noto Sans Symbols", sans-serif;
+::-webkit-scrollbar{
+    display: none;
 }
 
 body{
