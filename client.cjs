@@ -166,7 +166,7 @@ function createBotInstance(client, io, socket) {
 
 
 io.on('connection', (socket) => {
-
+    console.log("Running");
     /**
      * Return Client List
      */
