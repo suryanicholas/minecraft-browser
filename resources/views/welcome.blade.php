@@ -114,9 +114,9 @@
             </div>
         </div>
     </div>
-    <script src="/socket.io/socket.io.js"></script>
+    <script src="http://145.79.8.36:3000/socket.io/socket.io.js"></script>
     <script type="module">
-        const socket = io();
+        const socket = io('http://145.79.8.36:3000');
         let active = 0;
         let clients = {};
         let control = false;
