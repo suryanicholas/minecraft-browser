@@ -4,8 +4,15 @@ const mineflayer = require('mineflayer');
 const Vec3 = require("vec3");
 const fs = require('fs');
 const tpsPlugin = require('mineflayer-tps')(mineflayer);
+const http = require('http');
 
-const io = new Server(3000, {
+const server = http.createServer();
+
+server.listen(3000, '127.0.0.1', () => {
+    console.log('Server Running...');
+})
+
+const io = new Server(server, {
     cors: { origin: "*" },
 });
 
