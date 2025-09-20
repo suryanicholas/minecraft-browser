@@ -9,8 +9,6 @@ const { evaluate } = require('mathjs');
 
 const io = new Server(4001, {
     cors: { origin: "*" },
-    host: '127.0.0.1',
-    ipv6Only: false
 });
 
 /**
