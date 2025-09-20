@@ -1,17 +1,12 @@
 require("dotenv").config();
-
-
 const { Server } = require('socket.io');
 const mineflayer = require('mineflayer');
-const fs = require('fs');
 const Vec3 = require("vec3");
-const { data } = require("jquery");
+const fs = require('fs');
 const tpsPlugin = require('mineflayer-tps')(mineflayer);
-const { evaluate, isNumber, index } = require('mathjs');
-const { text } = require("stream/consumers");
 
 const io = new Server(3000, {
-    cors: { origin: "*" }
+    cors: { origin: "*" },
 });
 
 /**
@@ -166,7 +161,7 @@ function createBotInstance(client, io, socket) {
 
 
 io.on('connection', (socket) => {
-    console.log("Running");
+    
     /**
      * Return Client List
      */

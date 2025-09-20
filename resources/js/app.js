@@ -3,14 +3,47 @@ import './jquery';
 
 var logs = JSON.parse(localStorage.getItem("consoleLog") || "[]");
 var lS = -1;
-var cC = 0;
+var cC = null;
+const ws = io('http://127.0.0.1:3000');
+const cP = {
+    success: 'text-green-400',
+    pending: 'text-gray-300',
+    error: "text-red-500",
+    warn: "text-yellow-400",
+    none: 'text-white'
+};
+
+ws.on('console', (data) => {
+    $('#console').prepend(`<div class="${cP[data.type]}">${data.message}</div>`);
+});
+
+$('#clients').click(function (e) {
+    $('aside.group').toggleClass('hidden');
+    $('aside.group').toggleClass('flex');
+});
+
+$('button.clients').click(function (e) {
+    let username = $(this).data('client-username');
+    if(cC != username){
+        cC = username;
+
+        $('button.clients').removeClass('bg-[#510000a5]');
+        $('button.clients').addClass('bg-[#3100058e]');
+        $(this).toggleClass('bg-[#3100058e]');
+        $(this).toggleClass('bg-[#510000a5]');
+
+        $('#console').prepend(`<div class="text-white">${username} ditampilkan.</div>`);
+    } else {
+        $('#console').prepend(`<div class="${cP.warn}">${username} sedang ditampilkan saat ini.</div>`);
+    }
+});
 
 $('#cli').submit(function (e) {
     e.preventDefault();
 
     let input = $('#cli input').val();
     if(input.trim()){
-        $('#console').prepend(`<div>${input}</div>`);
+        ws.emit('cli', "testuser",input);
         $('#cli input').val('');
 
         if(logs[0] != input){
@@ -54,24 +87,4 @@ $('#cli input').keydown(function (e) {
             break;
     }
 
-});
-
-$('#connect').click(function (e) {
-    e.preventDefault();
-
-    $(this).toggleClass('bg-red-500');
-    $(this).toggleClass('bg-orange-400');
-    setTimeout(() => {
-        $(this).toggleClass('bg-orange-400');
-        $(this).toggleClass('bg-lime-500');
-        
-    }, 1500);
-
-    $(`button[data-client-index="${cC}"] .indicator`).toggleClass('bg-red-500');
-    $(`button[data-client-index="${cC}"] .indicator`).toggleClass('bg-orange-400');
-    setTimeout(() => {
-        $(`button[data-client-index="${cC}"] .indicator`).toggleClass('bg-orange-400');
-        $(`button[data-client-index="${cC}"] .indicator`).toggleClass('bg-lime-500');
-        
-    }, 1500);
 });

@@ -5,8 +5,7 @@
     "scripts": {
         "build": "vite build",
         "dev": "vite",
-        "client": "node client.cjs",
-        "clientv2": "node clientv2.cjs"
+        "client": "node clientv3.cjs"
     },
     "devDependencies": {
         "@tailwindcss/vite": "^4.0.0",
