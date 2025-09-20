@@ -8,7 +8,8 @@ const tpsPlugin = require('mineflayer-tps')(mineflayer);
 const { evaluate } = require('mathjs');
 
 const io = new Server(4001, {
-    cors: { origin: "*" }
+    cors: { origin: "*" },
+    host: '127.0.0.1'
 });
 
 /**
