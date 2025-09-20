@@ -7,7 +7,7 @@ const Vec3 = require("vec3");
 const tpsPlugin = require('mineflayer-tps')(mineflayer);
 const { evaluate } = require('mathjs');
 
-const io = new Server(3000, {
+const io = new Server(4001, {
     cors: { origin: "*" }
 });
 
