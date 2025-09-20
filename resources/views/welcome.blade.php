@@ -122,7 +122,7 @@
         let control = false;
         let dropItem = false;
         let equipItem = false;
-
+        
         socket.emit('clients:list');
         socket.once('clients:list', (data) => {
             clients = data;
@@ -133,7 +133,7 @@
 
             $('#clients button').click(function () {
                 active = $(this).data('client-index');
-
+                
                 if(clients[active].connected){
                     $('button#connect').removeClass('bg-[#ff00007c] border-[#fc4e4ec8] hover:bg-[#fd6f6fa8]');
                     $('button#connect').addClass('bg-[#00ff337c] border-[#94fc4ec8] hover:bg-[#71fd6fa8]');
@@ -197,7 +197,7 @@
                     
                 }
             });
-
+            
             if(clients[active].connected){
                 $('button#connect').removeClass('bg-[#ff00007c] border-[#fc4e4ec8] hover:bg-[#fd6f6fa8]');
                 $('button#connect').addClass('bg-[#00ff337c] border-[#94fc4ec8] hover:bg-[#71fd6fa8]');
@@ -207,7 +207,7 @@
                 $('button#connect').removeClass('bg-[#00ff337c] border-[#94fc4ec8] hover:bg-[#71fd6fa8]');
                 $('button#connect').text('Offline');
             }
-
+            
             if(clients[active].afk){
                 $('button#afk').removeClass('border-[#5c88e8] hover:bg-[#104ac6]');
                 $('button#afk').addClass('bg-[#fff200b0] border-[#e8e65c] hover:bg-[#f4eb41]');
@@ -257,7 +257,7 @@
             }
             
         });
-
+        
         $('button#connect').click(function () {
             let x = clients[active].connected;
             if(!x){
@@ -266,7 +266,7 @@
                 socket.emit('clients:disconnect', active);
             }
         });
-
+        
         $('button#afk').click(function () {
             let x = clients[active].afk;
             if(!x){
@@ -275,7 +275,7 @@
                 socket.emit('clients:afk', active);
             }
         });
-
+        
         $('button#auto-sell').click(function () {
             let x = clients[active].autoSell;
             if(!x){
@@ -320,7 +320,7 @@
                 socket.emit('clients:module', active);
             }
         });
-
+        
         $('button#control').click(function () {
             if(!control){
                 control = true;
@@ -333,7 +333,7 @@
                 $('button#control').removeClass('bg-[#fff200b0] border-[#e8e65c] hover:bg-[#f4eb41]');
             }
         });
-
+        
         $('button#dropItem').click(function () {
             if(equipItem){
                 equipItem = false;
@@ -351,7 +351,7 @@
                 $(this).removeClass('bg-[#fff200b0] border-[#e8e65c] hover:bg-[#f4eb41]');
             }
         });
-
+        
         $('button#equip').click(function () {
             if(dropItem){
                 dropItem = false;
@@ -369,11 +369,11 @@
                 $(this).removeClass('bg-[#fff200b0] border-[#e8e65c] hover:bg-[#f4eb41]');
             }
         });
-
+        
         $('button#inventory').click(function () {
             socket.emit('inventory:update', active);
         });
-
+        
         $('button.server-shortcut').click(function () {
             let command = $(this).data('command');
             socket.emit('clients:chat', active, `/${command}`);
@@ -397,24 +397,24 @@
             socket.emit('clients:chat', active, msg);
             $('input[name="messages"]').val('');
         });
-
+        
         $('#sign').submit(function(e) {
             e.preventDefault();
-
+            
             let signText = [
                 $('input[name="text-line-0"]').val(),
                 $('input[name="text-line-1"]').val(),
                 $('input[name="text-line-2"]').val(),
                 $('input[name="text-line-3"]').val()
             ];
-
+            
             socket.emit('sign:update', active, signText);
         });
 
         /**
          * Control State
          */
-
+        
         
 
         $(document).keydown(function (e) {
@@ -424,33 +424,33 @@
                         socket.emit('clients:control', active, 'forward', true);
                         break;
 
-                    case "a":
+                        case "a":
                         socket.emit('clients:control', active, 'left', true);
                         break;
                         
-                    case "s":
-                        socket.emit('clients:control', active, 'back', true);
-                        break;
+                        case "s":
+                            socket.emit('clients:control', active, 'back', true);
+                            break;
                         
-                    case "d":
-                        socket.emit('clients:control', active, 'right', true);
-                        break;
-                        
+                            case "d":
+                                socket.emit('clients:control', active, 'right', true);
+                                break;
+                                
                     case " ":
                         socket.emit('clients:control', active, 'jump', true);
                         break;
                         
-                    case "Shift":
-                        socket.emit('clients:control', active, 'sneak', true);
+                        case "Shift":
+                            socket.emit('clients:control', active, 'sneak', true);
+                            break;
+                            
+                            default:
                         break;
-                    
-                    default:
-                        break;
+                    }
                 }
-            }
-        });
-
-        $(document).keyup(function (e) {
+            });
+            
+            $(document).keyup(function (e) {
             if(control){
                 switch (e.key) {
                     case "w":
@@ -461,58 +461,59 @@
                         socket.emit('clients:control', active, 'left', false);
                         break;
                         
-                    case "s":
+                        case "s":
                         socket.emit('clients:control', active, 'back', false);
                         break;
                         
-                    case "d":
-                        socket.emit('clients:control', active, 'right', false);
+                        case "d":
+                            socket.emit('clients:control', active, 'right', false);
+                            break;
+                            
+                            case " ":
+                                socket.emit('clients:control', active, 'jump', false);
+                                break;
+                                
+                                case "Shift":
+                                    socket.emit('clients:control', active, 'sneak', false);
                         break;
                         
-                    case " ":
-                        socket.emit('clients:control', active, 'jump', false);
-                        break;
-                        
-                    case "Shift":
-                        socket.emit('clients:control', active, 'sneak', false);
-                        break;
-                    
-                    default:
-                        break;
-                }
+                        default:
+                            break;
+                        }
             }
         });
-
+        
         $('button.inventory').hover(function () {
-                let index = $(this).data('slot');
-                let item = clients[active].inventory.slots[index];
+            let index = $(this).data('slot');
+            let item = clients[active].inventory.slots[index];
                 
-                if(item){
-                    $('.inventory-cursor').text(`${item.name} x${item.count}`);
-                }
-            }, function () {
-                $('.inventory-cursor').text('');
+            if(item){
+                $('.inventory-cursor').text(`${item.name} x${item.count}`);
             }
-        );
-
+        }, function () {
+            $('.inventory-cursor').text('');
+        }
+    );
+    
         $('button.inventory').click(function () {
             let slot = $(this).data('slot');
-
+            
             if(dropItem){
                 socket.emit('inventory:toss', active, slot);
             }
-
+            
             if(equipItem){
                 socket.emit('inventory:equip', active, slot);
             }
         });
-
+        
         $('button.virtual').click(function () {
             let slot = $(this).data('slot');
-
+            
             socket.emit('virtual:click', active, slot);
         });
-
-    </script>
+        
+        </script>
+        <script src="/socket.io/socket.io.js"></script>
 </body>
 </html>
