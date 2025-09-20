@@ -205,6 +205,8 @@ function createBotInstance(client, io, socket) {
 
 io.on('connection', (socket) => {
 
+    console.log(io.host);
+
     socket.emit('clients:list', clients);
     socket.on('clients:list', () => {
         socket.emit('clients:update', clients);
