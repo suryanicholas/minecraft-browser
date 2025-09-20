@@ -514,6 +514,6 @@
         });
         
         </script>
-        <script src="/socket.io/socket.io.js"></script>
+        <script src="http://145.79.8.36:4001/socket.io/socket.io.js"></script>
 </body>
 </html>
